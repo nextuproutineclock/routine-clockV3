@@ -78,7 +78,11 @@ svg {
 svg text {
   -webkit-font-smoothing: antialiased;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
-  pointer-events: none;
+  cursor: pointer;
+}
+
+svg path {
+  cursor: pointer;
 }
 
 /* ========== DAY / NIGHT THEMES ========== */
