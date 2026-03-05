@@ -358,100 +358,6 @@ function drawFocusSectors(tasks, currentIdx) {
 
 // ---------- TAP-AND-HOLD TOOLTIP ----------
 
-(function initTooltip() {
-  const tooltip = document.getElementById("activity-tooltip");
-  const clockContainer = document.querySelector(".clock-container");
-  if (!tooltip || !clockContainer) return;
-
-  let holdTimer = null;
-  let isShowing = false;
-
-  function showTooltip(label, clientX, clientY) {
-    if (!label) return;
-    const rect = clockContainer.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-
-    tooltip.textContent = label;
-    tooltip.style.left = x + "px";
-    tooltip.style.top = Math.max(20, y - 25) + "px";
-    tooltip.classList.add("visible");
-    isShowing = true;
-  }
-
-  function hideTooltip() {
-    tooltip.classList.remove("visible");
-    isShowing = false;
-    if (holdTimer) {
-      clearTimeout(holdTimer);
-      holdTimer = null;
-    }
-  }
-
-  function findLabel(target) {
-    // Check if we hit an SVG text (emoji icon)
-    if (target.tagName === "text" && target.getAttribute("data-label")) {
-      return target.getAttribute("data-label");
-    }
-    // Check if we hit a group element (photo icon) or something inside it
-    const group = target.closest("g[data-label]");
-    if (group) {
-      return group.getAttribute("data-label");
-    }
-    // Check if we hit an image inside a photo icon group
-    if (target.tagName === "image" || target.tagName === "circle") {
-      const parent = target.parentNode;
-      if (parent && parent.getAttribute("data-label")) {
-        return parent.getAttribute("data-label");
-      }
-    }
-    // Check if we hit a path (sector); find the nearest icon's label
-    if (target.tagName === "path" && target.closest("#sectors")) {
-      const parent = target.parentNode;
-      const children = Array.from(parent.children);
-      const idx = children.indexOf(target);
-      for (let i = idx + 1; i < children.length; i++) {
-        if (children[i].getAttribute("data-label")) {
-          return children[i].getAttribute("data-label");
-        }
-        if (children[i].tagName === "path") break;
-      }
-    }
-    return null;
-  }
-
-  // Touch events (mobile)
-  clockContainer.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (!target) return;
-
-    const label = findLabel(target);
-    if (!label) return;
-
-    holdTimer = setTimeout(() => {
-      showTooltip(label, touch.clientX, touch.clientY);
-    }, 300);
-  }, { passive: true });
-
-  clockContainer.addEventListener("touchend", hideTooltip);
-  clockContainer.addEventListener("touchcancel", hideTooltip);
-  clockContainer.addEventListener("touchmove", hideTooltip);
-
-  // Mouse events (desktop)
-  clockContainer.addEventListener("mousedown", (e) => {
-    const label = findLabel(e.target);
-    if (!label) return;
-
-    holdTimer = setTimeout(() => {
-      showTooltip(label, e.clientX, e.clientY);
-    }, 300);
-  });
-
-  clockContainer.addEventListener("mouseup", hideTooltip);
-  clockContainer.addEventListener("mouseleave", hideTooltip);
-})();
-
 // ---------- FOCUS MODE UPDATE ----------
 
 function updateFocusClock() {
@@ -759,5 +665,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-  }
-});
