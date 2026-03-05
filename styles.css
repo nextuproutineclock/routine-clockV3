@@ -9,9 +9,9 @@
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  background-color: #f0f0ec;
+  background: #f0f0ec;
   font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: background 0.5s ease, color 0.5s ease;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -54,8 +54,8 @@ body {
 
 /* ========== CLOCK CONTAINER ========== */
 .clock-container {
-  width: 55vw;
-  max-width: 320px;
+  width: 60vw;
+  max-width: 360px;
   aspect-ratio: 1 / 1;
   margin: 0.5rem auto 0;
   position: relative;
