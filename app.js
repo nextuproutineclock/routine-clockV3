@@ -159,8 +159,8 @@ function createSector(startAngle, endAngle, color, isCurrent) {
   return path;
 }
 
-function createIcon(startAngle, endAngle, iconChar, isCurrent, label) {
-  if (!iconChar) return null;
+function createIcon(startAngle, endAngle, iconChar, isCurrent, label, photo) {
+  if (!iconChar && !photo) return null;
 
   let diff = endAngle - startAngle;
   if (diff < 0) diff += 360;
@@ -172,6 +172,48 @@ function createIcon(startAngle, endAngle, iconChar, isCurrent, label) {
   const x = cx + r * Math.cos(midRad);
   const y = cy + r * Math.sin(midRad);
 
+  // If there's a photo, render a circular image instead of emoji
+  if (photo && photo.startsWith("data:")) {
+    const imgSize = isCurrent ? 18 : 14;
+    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    group.setAttribute("data-label", label || "");
+
+    // Circular clip path with unique ID
+    const clipId = "clip-" + Math.random().toString(36).substr(2, 6);
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    const clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+    clipPath.setAttribute("id", clipId);
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", y);
+    circle.setAttribute("r", imgSize / 2);
+    clipPath.appendChild(circle);
+    defs.appendChild(clipPath);
+    group.appendChild(defs);
+
+    // White circle background (border effect)
+    const bg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    bg.setAttribute("cx", x);
+    bg.setAttribute("cy", y);
+    bg.setAttribute("r", imgSize / 2 + 1);
+    bg.setAttribute("fill", "#fff");
+    group.appendChild(bg);
+
+    // The image
+    const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    img.setAttribute("x", x - imgSize / 2);
+    img.setAttribute("y", y - imgSize / 2);
+    img.setAttribute("width", imgSize);
+    img.setAttribute("height", imgSize);
+    img.setAttributeNS("http://www.w3.org/1999/xlink", "href", photo);
+    img.setAttribute("clip-path", "url(#" + clipId + ")");
+    group.appendChild(img);
+
+    if (isCurrent) group.setAttribute("class", "current-icon");
+    return group;
+  }
+
+  // Default: emoji text
   const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   text.setAttribute("x", x);
   text.setAttribute("y", y);
@@ -233,8 +275,8 @@ function createFocusSector(startMin, endMin, color, isCurrent) {
   return path;
 }
 
-function createFocusIcon(startMin, endMin, iconChar, isCurrent, label) {
-  if (!iconChar) return null;
+function createFocusIcon(startMin, endMin, iconChar, isCurrent, label, photo) {
+  if (!iconChar && !photo) return null;
 
   let diff = endMin - startMin;
   if (diff <= 0) diff += 60;
@@ -246,6 +288,44 @@ function createFocusIcon(startMin, endMin, iconChar, isCurrent, label) {
   const cx = 100, cy = 100;
   const x = cx + r * Math.cos(midRad);
   const y = cy + r * Math.sin(midRad);
+
+  // If there's a photo, render circular image
+  if (photo && photo.startsWith("data:")) {
+    const imgSize = isCurrent ? 18 : 14;
+    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    group.setAttribute("data-label", label || "");
+
+    const clipId = "fclip-" + Math.random().toString(36).substr(2, 6);
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    const clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+    clipPath.setAttribute("id", clipId);
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", y);
+    circle.setAttribute("r", imgSize / 2);
+    clipPath.appendChild(circle);
+    defs.appendChild(clipPath);
+    group.appendChild(defs);
+
+    const bg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    bg.setAttribute("cx", x);
+    bg.setAttribute("cy", y);
+    bg.setAttribute("r", imgSize / 2 + 1);
+    bg.setAttribute("fill", "#fff");
+    group.appendChild(bg);
+
+    const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    img.setAttribute("x", x - imgSize / 2);
+    img.setAttribute("y", y - imgSize / 2);
+    img.setAttribute("width", imgSize);
+    img.setAttribute("height", imgSize);
+    img.setAttributeNS("http://www.w3.org/1999/xlink", "href", photo);
+    img.setAttribute("clip-path", "url(#" + clipId + ")");
+    group.appendChild(img);
+
+    if (isCurrent) group.setAttribute("class", "current-icon");
+    return group;
+  }
 
   const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   text.setAttribute("x", x);
@@ -271,7 +351,7 @@ function drawFocusSectors(tasks, currentIdx) {
   tasks.forEach((task, idx) => {
     const isCurrent = idx === currentIdx;
     sectorsGroup.appendChild(createFocusSector(task.start, task.end, task.color, isCurrent));
-    const icon = createFocusIcon(task.start, task.end, task.icon, isCurrent, task.label);
+    const icon = createFocusIcon(task.start, task.end, task.icon, isCurrent, task.label, task.photo);
     if (icon) sectorsGroup.appendChild(icon);
   });
 }
@@ -309,22 +389,32 @@ function drawFocusSectors(tasks, currentIdx) {
   }
 
   function findLabel(target) {
-    // Check if we hit an SVG text (icon) element or a sector path
+    // Check if we hit an SVG text (emoji icon)
     if (target.tagName === "text" && target.getAttribute("data-label")) {
       return target.getAttribute("data-label");
     }
+    // Check if we hit a group element (photo icon) or something inside it
+    const group = target.closest("g[data-label]");
+    if (group) {
+      return group.getAttribute("data-label");
+    }
+    // Check if we hit an image inside a photo icon group
+    if (target.tagName === "image" || target.tagName === "circle") {
+      const parent = target.parentNode;
+      if (parent && parent.getAttribute("data-label")) {
+        return parent.getAttribute("data-label");
+      }
+    }
     // Check if we hit a path (sector); find the nearest icon's label
     if (target.tagName === "path" && target.closest("#sectors")) {
-      // Find the sector's index among siblings
       const parent = target.parentNode;
       const children = Array.from(parent.children);
       const idx = children.indexOf(target);
-      // Look for the next text sibling (icon follows sector)
       for (let i = idx + 1; i < children.length; i++) {
-        if (children[i].tagName === "text" && children[i].getAttribute("data-label")) {
+        if (children[i].getAttribute("data-label")) {
           return children[i].getAttribute("data-label");
         }
-        if (children[i].tagName === "path") break; // hit next sector
+        if (children[i].tagName === "path") break;
       }
     }
     return null;
@@ -507,7 +597,7 @@ function update12HourClock() {
 
       const isCurrent = idx === currentIdx;
       sectorsGroup.appendChild(createSector(startDeg, endDeg, task.color, isCurrent));
-      const icon = createIcon(startDeg, endDeg, task.icon, isCurrent, task.label);
+      const icon = createIcon(startDeg, endDeg, task.icon, isCurrent, task.label, task.photo);
       if (icon) sectorsGroup.appendChild(icon);
     });
   }
@@ -532,7 +622,7 @@ function update12HourClock() {
 
       const isCurrent = idx === currentIdx;
       sectorsGroup.appendChild(createSector(startDeg, endDeg, task.color, isCurrent));
-      const icon = createIcon(startDeg, endDeg, task.icon, isCurrent, task.label);
+      const icon = createIcon(startDeg, endDeg, task.icon, isCurrent, task.label, task.photo);
       if (icon) sectorsGroup.appendChild(icon);
     });
   }
@@ -666,5 +756,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       updateClock();
     });
+  }
+});
+
   }
 });
