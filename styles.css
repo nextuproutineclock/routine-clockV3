@@ -54,8 +54,8 @@ body {
 
 /* ========== CLOCK CONTAINER ========== */
 .clock-container {
-  width: 70vw;
-  max-width: 380px;
+  width: 55vw;
+  max-width: 320px;
   aspect-ratio: 1 / 1;
   margin: 0.5rem auto 0;
   position: relative;
@@ -382,4 +382,3 @@ svg text {
     max-width: 88vw;
   }
 }
-
