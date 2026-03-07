@@ -94,6 +94,8 @@
         <label class="palette-option"><input type="radio" name="palette" value="bold" /><span class="palette-name">Bold</span><span class="palette-dots"><span style="background:#f97316"></span><span style="background:#22c55e"></span><span style="background:#3b82f6"></span><span style="background:#e11d48"></span></span></label>
         <label class="palette-option"><input type="radio" name="palette" value="calm" /><span class="palette-name">Calm</span><span class="palette-dots"><span style="background:#a5b4fc"></span><span style="background:#7dd3fc"></span><span style="background:#6ee7b7"></span><span style="background:#fde68a"></span></span></label>
         <label class="palette-option"><input type="radio" name="palette" value="neutrals" /><span class="palette-name">Neutral</span><span class="palette-dots"><span style="background:#f5f5dc"></span><span style="background:#f4e1c1"></span><span style="background:#e8c39e"></span><span style="background:#d2a679"></span></span></label>
+        <label class="palette-option"><input type="radio" name="palette" value="highcontrast" /><span class="palette-name">High Contrast</span><span class="palette-dots"><span style="background:#FFD700"></span><span style="background:#0000FF"></span><span style="background:#FF0000"></span><span style="background:#00CC00"></span></span></label>
+        <label class="palette-option"><input type="radio" name="palette" value="earth" /><span class="palette-name">Earth</span><span class="palette-dots"><span style="background:#8B9D6B"></span><span style="background:#C17A4A"></span><span style="background:#D4A57B"></span><span style="background:#6B7F5E"></span></span></label>
       </div>
     </div>
 
@@ -133,7 +135,7 @@
   </div>
 
   <script>
-    const PALETTES={soft:["#fde68a","#bfdbfe","#bbf7d0","#fecaca","#e9d5ff","#fee2e2"],bold:["#f97316","#22c55e","#3b82f6","#e11d48","#a855f7","#0ea5e9"],calm:["#a5b4fc","#7dd3fc","#6ee7b7","#fde68a","#f9a8d4","#c4b5fd"],neutrals:["#f5f5dc","#f4e1c1","#e8c39e","#d2a679","#b58863","#8b5a2b"]};
+    const PALETTES={soft:["#fde68a","#bfdbfe","#bbf7d0","#fecaca","#e9d5ff","#fee2e2"],bold:["#f97316","#22c55e","#3b82f6","#e11d48","#a855f7","#0ea5e9"],calm:["#a5b4fc","#7dd3fc","#6ee7b7","#fde68a","#f9a8d4","#c4b5fd"],neutrals:["#f5f5dc","#f4e1c1","#e8c39e","#d2a679","#b58863","#8b5a2b"],highcontrast:["#FFD700","#0000FF","#FF0000","#00CC00","#FF6600","#FFFFFF"],earth:["#8B9D6B","#C17A4A","#D4A57B","#6B7F5E","#A0522D","#C9B98E"]};
 
     // Resize an image file to a small circular base64 PNG (60x60)
     function processPhoto(file) {
@@ -403,7 +405,6 @@
   </script>
 </body>
 </html>
-
 
 
 
