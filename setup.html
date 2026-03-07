@@ -96,6 +96,8 @@
         <label class="palette-option"><input type="radio" name="palette" value="neutrals" /><span class="palette-name">Neutral</span><span class="palette-dots"><span style="background:#f5f5dc"></span><span style="background:#f4e1c1"></span><span style="background:#e8c39e"></span><span style="background:#d2a679"></span></span></label>
         <label class="palette-option"><input type="radio" name="palette" value="highcontrast" /><span class="palette-name">High Contrast</span><span class="palette-dots"><span style="background:#FFD700"></span><span style="background:#0000FF"></span><span style="background:#FF0000"></span><span style="background:#00CC00"></span></span></label>
         <label class="palette-option"><input type="radio" name="palette" value="earth" /><span class="palette-name">Earth</span><span class="palette-dots"><span style="background:#8B9D6B"></span><span style="background:#C17A4A"></span><span style="background:#D4A57B"></span><span style="background:#6B7F5E"></span></span></label>
+        <label class="palette-option"><input type="radio" name="palette" value="ocean" /><span class="palette-name">Ocean</span><span class="palette-dots"><span style="background:#0891B2"></span><span style="background:#06B6D4"></span><span style="background:#5EEAD4"></span><span style="background:#155E75"></span></span></label>
+        <label class="palette-option"><input type="radio" name="palette" value="sunset" /><span class="palette-name">Sunset</span><span class="palette-dots"><span style="background:#F97316"></span><span style="background:#FB923C"></span><span style="background:#F472B6"></span><span style="background:#E11D48"></span></span></label>
       </div>
     </div>
 
@@ -135,7 +137,7 @@
   </div>
 
   <script>
-    const PALETTES={soft:["#fde68a","#bfdbfe","#bbf7d0","#fecaca","#e9d5ff","#fee2e2"],bold:["#f97316","#22c55e","#3b82f6","#e11d48","#a855f7","#0ea5e9"],calm:["#a5b4fc","#7dd3fc","#6ee7b7","#fde68a","#f9a8d4","#c4b5fd"],neutrals:["#f5f5dc","#f4e1c1","#e8c39e","#d2a679","#b58863","#8b5a2b"],highcontrast:["#FFD700","#0000FF","#FF0000","#00CC00","#FF6600","#FFFFFF"],earth:["#8B9D6B","#C17A4A","#D4A57B","#6B7F5E","#A0522D","#C9B98E"]};
+    const PALETTES={soft:["#fde68a","#bfdbfe","#bbf7d0","#fecaca","#e9d5ff","#fee2e2"],bold:["#f97316","#22c55e","#3b82f6","#e11d48","#a855f7","#0ea5e9"],calm:["#a5b4fc","#7dd3fc","#6ee7b7","#fde68a","#f9a8d4","#c4b5fd"],neutrals:["#f5f5dc","#f4e1c1","#e8c39e","#d2a679","#b58863","#8b5a2b"],highcontrast:["#FFD700","#0000FF","#FF0000","#00CC00","#FF6600","#FFFFFF"],earth:["#8B9D6B","#C17A4A","#D4A57B","#6B7F5E","#A0522D","#C9B98E"],ocean:["#0891B2","#06B6D4","#5EEAD4","#155E75","#A5F3FC","#2DD4BF"],sunset:["#F97316","#FB923C","#F472B6","#E11D48","#FBBF24","#FDA4AF"]};
 
     // Resize an image file to a small circular base64 PNG (60x60)
     function processPhoto(file) {
@@ -405,8 +407,6 @@
   </script>
 </body>
 </html>
-
-
 
 
 
